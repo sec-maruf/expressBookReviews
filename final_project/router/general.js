@@ -34,16 +34,25 @@ public_users.get('/isbn/:isbn',function (req, res) {
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  const author = req.params.author;
-  const booksByAuthor = Object.entries(books)
-    .filter(([isbn, book]) => book.author === author)
-    .map(([isbn, book]) => ({ isbn, title: book.title, reviews: book.reviews }));
 
-  if (booksByAuthor.length > 0) {
+  // Extract the title parameter from the request object
+  const author = req.params.author;
+
+  //Get an array of book entries from the books object, filter them by author,
+  // and then map the filtered entries to a new array with the desired properties
+  const booksByAuthor = Object.entries(books) // Convert books object to an array of [isbn, book] pairs
+  .filter(([isbn, book]) => book.author === author)// Filter books by the specified author
+  .map(([isbn, book]) => ({isbn, title: book.title, reviews: book.reviews})); // Map the filtered entries to a new array with only isbn, title, and review
+ 
+  // Check if any books with the specified author were found
+  if(booksByAuthor.length > 0){
+
+    // If books were found, send a 200 OK response with the books data in JSON format
     res.status(200).json({booksByAuthor});
-  } else {
-    res.status(404).json({ message: 'No books found by this author' });
+  }else{
+    
+    // If no books were found, send a 404 Not Found response with an error message
+    res.status(404).json("No books has been found by this author");
   }
   
 
@@ -51,17 +60,26 @@ public_users.get('/author/:author',function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  const title = req.params.title;
-  const booksByTitle = Object.entries(books)
-    .filter(([isbn, book]) => book.title === title)
-    .map(([isbn, book]) => ({ isbn, author: book.author, reviews: book.reviews }));
+// Extract the title parameter from the request object
+ const title = req.params.title;
 
-  if (booksByTitle.length > 0) {
+// Get an array of book entries from the books object, filter them by title,
+// and then map the filtered entries to a new array with the desired properties
+ const booksByTitle = Object.entries(books) // Convert books object to an array of [isbn, book] pairs
+  .filter(([isbn, book]) => book.title === title) // Filter books by the specified title
+  .map(([isbn, book])=>({isbn, author: book.author, review: book.reviews})); // Map the filtered entries to a new array with only isbn, author, and review
+
+// Check if any books with the specified title were found
+ if(booksByTitle.length > 0){
+
+    // If books were found, send a 200 OK response with the books data in JSON format
     res.status(200).json({booksByTitle});
-  } else {
-    res.status(404).json({ message: 'No books found by this author' });
-  }
+ }else{
+
+    // If no books were found, send a 404 Not Found response with an error message
+    res.status(404).json("No books has been found by this title"); 
+ }
+
   
 });
 
