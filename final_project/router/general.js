@@ -50,7 +50,7 @@ public_users.get('/author/:author',function (req, res) {
     // If books were found, send a 200 OK response with the books data in JSON format
     res.status(200).json({booksByAuthor});
   }else{
-    
+
     // If no books were found, send a 404 Not Found response with an error message
     res.status(404).json("No books has been found by this author");
   }
@@ -85,8 +85,17 @@ public_users.get('/title/:title',function (req, res) {
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  // Extract the 'isbn' parameter from the request object
+  const isbn = req.params.isbn;
+  // Check if the book with the provided ISBN exists in the 'books' object
+  if(books[isbn]){
+    // If the book exists, send the reviews of the book in the response
+    res.send(books[isbn].reviews);
+  }else {
+    // If the book does not exist, send a 404 Not Found status with an error message
+    res.status(404).send('Sorry, reviews has not been found by this isbn');
+  }
+  
 });
 
 module.exports.general = public_users;
